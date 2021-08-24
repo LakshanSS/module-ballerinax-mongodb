@@ -44,7 +44,7 @@ Client mongoClient = check new (mongoConfig, DATABASE_NAME);
 }
 public function initializeInValidClient() {
     log:printInfo("Start initialization test failure");
-    Client|Error mongoClient = new (mongoConfigError,"MyDb");
+    Client|Error|error mongoClient = new (mongoConfigError,"MyDb");
     if (mongoClient is ApplicationError) {
         log:printInfo("Creating client failed '" + mongoClient.message() + "'.");
     } else {

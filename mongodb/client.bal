@@ -38,7 +38,7 @@ public isolated client class Client {
     # + databaseName - Database name to connect
     # + return - A `mongodb:Error` if there is any error in the provided configurations or database name
     public isolated function init(ClientConfig config, @display {label: "Database Name"} string? databaseName = ())
-                                  returns Error? {
+                                  returns Error?|error? {
         final ConnectionProperties? configOptions = config?.options;
         if (configOptions is ConnectionProperties) {
             final boolean? sslEnabled = configOptions?.sslEnabled;
@@ -251,7 +251,7 @@ public isolated client class Client {
     }
 }
 
-isolated function initClient(ClientConfig config) returns handle|ApplicationError = @java:Method {
+isolated function initClient(ClientConfig config) returns handle|ApplicationError|error = @java:Method {
     'class: "org.ballerinalang.mongodb.MongoDBDataSourceUtil"
 } external;
 
