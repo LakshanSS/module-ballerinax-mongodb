@@ -70,6 +70,7 @@ public class MongoDBDataSourceUtil {
     }
 
     public static Object initClient(BMap<BString, BValue> config) {
+        log.info("---------------------------------- line 73");
         String host = config.containsKey(HOST) ? config.getStringValue(HOST).getValue() : "";
         long port = config.containsKey(PORT) ? config.getIntValue(PORT) : 0;
 
@@ -79,8 +80,10 @@ public class MongoDBDataSourceUtil {
         BMap options = config.containsKey(OPTIONS) ? config.getMapValue(OPTIONS) : null;
 
         try {
+            log.info("---------------------------------- line 83");
             return init(host, port, username, password, options);
         } catch (MongoDBClientException e) {
+            log.info("---------------------------------- line 86");
             return BallerinaErrorGenerator.createBallerinaApplicationError(e);
         }
     }

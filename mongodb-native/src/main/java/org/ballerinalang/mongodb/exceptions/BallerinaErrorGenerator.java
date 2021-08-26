@@ -25,6 +25,7 @@ import io.ballerina.runtime.api.values.BString;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import static org.ballerinalang.mongodb.MongoDBConstants.APPLICATION_ERROR;
 import static org.ballerinalang.mongodb.MongoDBConstants.BAL_PACKAGE;
@@ -36,18 +37,25 @@ import static org.ballerinalang.mongodb.MongoDBConstants.DatabaseError.NAME;
  * Map Java Exception to Ballerina MongoDB Error.
  */
 public class BallerinaErrorGenerator {
+    private static final Logger log = Logger.getLogger(BallerinaErrorGenerator.class.getName());
 
     public static BError createBallerinaDatabaseError(Exception e) {
         Map<String, Object> valueMap = new HashMap<>();
         valueMap.put(DETAIL_FIELD_MONGODB_EXCEPTION, e.getClass().getSimpleName());
+        log.info("this is a log from line 44 ");
         BMap<BString, Object> recordValue = ValueCreator
                 .createRecordValue(BAL_PACKAGE, DETAIL_RECORD_NAME, valueMap);
-
+        log.info("this is a log from line 47 ");
         return ErrorCreator.createDistinctError(NAME, BAL_PACKAGE, StringUtils.fromString(e.getMessage()), recordValue);
     }
 
     public static BError createBallerinaApplicationError(Exception e) {
-        return ErrorCreator.createDistinctError(APPLICATION_ERROR, BAL_PACKAGE, StringUtils.fromString(e.getMessage()));
+        log.info("this is a log from line 53 ");
+        //return ErrorCreator.createDistinctError(APPLICATION_ERROR, BAL_PACKAGE, StringUtils.fromString(e.getMessage()));
+        BError bError = ErrorCreator.createError(e);
+        log.info("this is a log from line 56 ");
+        return ErrorCreator.createError(BAL_PACKAGE, APPLICATION_ERROR, 
+                StringUtils.fromString(e.getMessage()), bError, e);
     }
 
 }
